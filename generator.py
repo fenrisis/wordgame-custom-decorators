@@ -1,7 +1,9 @@
 import random
 from dictionary import dictionary
+from decorators import log_generated_items
 
 
+@log_generated_items('log.txt')
 def generate_random_translation(dictionary):
     while True:
         word = random.choice(list(dictionary.keys()))
