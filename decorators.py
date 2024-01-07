@@ -72,4 +72,23 @@ def log_learning_session(log_file_path):
             return score, num_questions
         return wrapper
     return decorator
+
+
+def log_generated_items(log_file_path):
+    def decorator(generator_func):
+        @functools.wraps(generator_func)
+        def wrapper(*args, **kwargs):
+            gen = generator_func(*args, **kwargs)
+            while True:
+                try:
+                    word, translation = next(gen)
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    with open(log_file_path, 'a', encoding='utf-8') as log_file:
+                        log_file.write(f"{timestamp} - Generated word: '{word}', Translation: '{translation}'\n")
+                    yield word, translation
+                except StopIteration:
+                    break
+        return wrapper
+    return decorator
+
   
